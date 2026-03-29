@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>그래프 알고리즘 치트시트</title>
+<style>
+@page { size: A4; margin: 12mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Pretendard', -apple-system, 'Noto Sans KR', sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.45;
+    color: #1a1a1a;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 30px;
+}
+h1 {
+    font-size: 15pt;
+    border-bottom: 2px solid #1e40af;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    color: #1e3a5f;
+}
+h2 {
+    font-size: 11pt;
+    color: #2563eb;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    border-left: 3px solid #2563eb;
+    padding-left: 6px;
+    break-after: avoid;
+}
+h3 {
+    font-size: 9.5pt;
+    font-weight: 700;
+    margin-top: 8px;
+    margin-bottom: 3px;
+    break-after: avoid;
+}
+p { margin: 3px 0; font-size: 9pt; }
+ul, ol { padding-left: 14px; margin: 3px 0; }
+li { font-size: 9pt; margin-bottom: 1px; }
+pre {
+    background: #f8f9fa;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    padding: 6px;
+    font-size: 7.5pt;
+    font-family: 'JetBrains Mono', 'D2Coding', 'Fira Code', monospace;
+    overflow-x: auto;
+    margin: 3px 0 6px 0;
+    line-height: 1.35;
+    break-inside: avoid;
+}
+code {
+    background: #e5e7eb;
+    padding: 0.5px 3px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', 'D2Coding', monospace;
+    font-size: 8pt;
+}
+pre code {
+    background: none;
+    padding: 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4px 0;
+    font-size: 8pt;
+    break-inside: avoid;
+}
+th, td {
+    border: 1px solid #d1d5db;
+    padding: 3px 5px;
+    text-align: left;
+}
+th {
+    background: #f0f4ff;
+    font-weight: 600;
+    color: #1e3a5f;
+}
+tr:nth-child(even) { background: #f9fafb; }
+blockquote {
+    border-left: 3px solid #f59e0b;
+    background: #fef9ee;
+    padding: 4px 8px;
+    margin: 4px 0;
+    font-size: 8.5pt;
+}
+strong { color: #dc2626; }
+em { font-style: italic; color: #6b7280; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 8px 0; }
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+@media print {
+    body { columns: 2; column-gap: 10mm; column-rule: 1px solid #e5e7eb; max-width: 190mm; padding: 0; font-size: 8.5pt; }
+    h1 { column-span: all; }
+    pre { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1 id="_1">그래프 알고리즘 치트시트</h1>
+<blockquote>
+<p>실제 코드 기반 | 343개 파일 분석 | adj_list: 263회, visited: 28회, dijkstra: 3회, topological: 4회, scc: 4회</p>
+</blockquote>
+<hr />
+<h2 id="_2">헤더 &amp; 공통 매크로</h2>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;bits/stdc++.h&gt;</span>
+<span class="cp">#define INF 987654321</span>
+<span class="cp">#define fastio ios_base::sync_with_stdio(false); cin.tie(nullptr);</span>
+<span class="cp">#define pb push_back</span>
+<span class="cp">#define sz(x) ((int)(x).size())</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ii</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vi</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ii</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vii</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vi</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vvi</span><span class="p">;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="1-263-1">1. 인접 리스트 구성 (263회 — 압도적 1위)</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">// 가중치 없는 그래프</span>
+<span class="n">vvi</span><span class="w"> </span><span class="n">graph</span><span class="p">;</span>
+<span class="n">graph</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">graph</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">pb</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="n">graph</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">pb</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w">   </span><span class="c1">// 양방향이면 양쪽 추가</span>
+
+<span class="c1">// 가중치 있는 그래프 (다익스트라 등)</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ii</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">G</span><span class="p">;</span><span class="w">   </span><span class="c1">// G[u] = {(v, cost), ...}</span>
+<span class="n">G</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">G</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">pb</span><span class="p">(</span><span class="n">ii</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">));</span><span class="w">      </span><span class="c1">// 단방향</span>
+</code></pre></div>
+
+<hr />
+<h2 id="2-dfs-1260-dfsbfs">2. DFS (재귀) (1260 DFS+BFS)</h2>
+<div class="highlight"><pre><span></span><code><span class="n">vi</span><span class="w"> </span><span class="n">dfs_num</span><span class="p">;</span><span class="w">   </span><span class="c1">// 방문 배열</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">dfs</span><span class="p">(</span><span class="n">vvi</span><span class="o">&amp;</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dfs_num</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w">   </span><span class="c1">// 방문 체크</span>
+<span class="w">    </span><span class="n">dfs_num</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dfs</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 초기화 &amp; 호출</span>
+<span class="n">dfs_num</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">sort</span><span class="p">(</span><span class="n">all</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span><span class="w">  </span><span class="c1">// 번호 오름차순 방문</span>
+<span class="n">dfs</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">);</span>
+</code></pre></div>
+
+<hr />
+<h2 id="3-bfs-1260-dfsbfs-2178">3. BFS 기본 (1260 DFS+BFS, 2178 미로)</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">// 기본 BFS — 최단 거리</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">bfs_num</span><span class="p">[</span><span class="mi">110</span><span class="p">][</span><span class="mi">110</span><span class="p">];</span><span class="w">   </span><span class="c1">// 방문 &amp; 거리 겸용</span>
+<span class="n">queue</span><span class="o">&lt;</span><span class="n">iii</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Q</span><span class="p">;</span><span class="w">            </span><span class="c1">// {거리, {x, y}}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">dx</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">dy</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="p">};</span>
+
+<span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">make_pair</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)));</span>
+<span class="n">bfs_num</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">Q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">iii</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">se</span><span class="p">.</span><span class="n">fi</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">se</span><span class="p">.</span><span class="n">se</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">fi</span><span class="p">;</span><span class="w">   </span><span class="c1">// 목적지 도달 거리 출력</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">nx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">se</span><span class="p">.</span><span class="n">fi</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">ny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">se</span><span class="p">.</span><span class="n">se</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">ny</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">nx</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">ny</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bfs_num</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">bfs_num</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">fi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">make_pair</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">)));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="bfs">BFS 핵심 원칙</h3>
+<ul>
+<li>방문 표시는 <strong>큐에 넣을 때</strong> — pop 할 때 하면 중복 삽입 발생</li>
+<li>4방향: <code>dx[] = {1,-1,0,0}</code>, <code>dy[] = {0,0,1,-1}</code></li>
+<li>8방향: <code>dx[] = {1,-1,0,0,1,1,-1,-1}</code>, <code>dy[] = {0,0,1,-1,1,-1,1,-1}</code></li>
+</ul>
+<hr />
+<h2 id="4-bfs-7576">4. 다중 소스 BFS (7576 토마토)</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">// 초기화: 모든 시작점을 큐에 미리 삽입</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">target</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">            </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">make_pair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">)));</span><span class="w">  </span><span class="c1">// 거리=0으로 시작</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">day</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">Q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">iii</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">day</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">day</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">fi</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">nx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">se</span><span class="p">.</span><span class="n">fi</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">ny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">se</span><span class="p">.</span><span class="n">se</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">범위</span><span class="w"> </span><span class="n">초과</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">arr</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 방문 표시로 arr 자체 수정</span>
+<span class="w">            </span><span class="n">cur</span><span class="o">++</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">fi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">make_pair</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">)));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cur</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">target</span><span class="p">)</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">day</span><span class="p">;</span>
+<span class="k">else</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+</code></pre></div>
+
+<blockquote>
+<p>핵심: 별도 visited 배열 없이 <code>arr</code> 값을 1로 바꿔 방문 표시.</p>
+</blockquote>
+<hr />
+<h2 id="5-3d-bfs-2206">5. 3D BFS — 상태 추가 (2206 벽부수기)</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">// 상태: {거리, x, y, 벽파괴여부}</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">MY</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">bfs_num</span><span class="p">[</span><span class="mi">1010</span><span class="p">][</span><span class="mi">1010</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span><span class="w">   </span><span class="c1">// [x][y][벽파괴사용여부]</span>
+
+<span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">});</span>
+<span class="n">bfs_num</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">Q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">MY</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">nx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">ny</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">범위초과</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// 일반 이동 (빈 칸)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">bfs_num</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">][</span><span class="n">t</span><span class="p">.</span><span class="n">b</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">bfs_num</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">][</span><span class="n">t</span><span class="p">.</span><span class="n">b</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// 벽 부수기 (아직 안 부쉈을 때만)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">bfs_num</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">bfs_num</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">({</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// 두 상태 중 최솟값</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">bfs_num</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">m</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">bfs_num</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">m</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
+<span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">ans</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">INF</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ans</span><span class="p">);</span>
+</code></pre></div>
+
+<blockquote>
+<p>3D BFS 패턴: 기존 2D에 <strong>"상태 차원"</strong> 추가. visited도 상태에 따라 분리.</p>
+</blockquote>
+<hr />
+<h2 id="6-1753">6. 다익스트라 (1753)</h2>
+<div class="highlight"><pre><span></span><code><span class="n">vi</span><span class="w"> </span><span class="nf">Dijkstra</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ii</span><span class="o">&gt;&gt;&amp;</span><span class="w"> </span><span class="n">graph</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">vi</span><span class="w"> </span><span class="n">dis</span><span class="p">(</span><span class="n">graph</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">INF</span><span class="p">);</span>
+<span class="w">    </span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">ii</span><span class="p">,</span><span class="w"> </span><span class="n">vii</span><span class="p">,</span><span class="w"> </span><span class="n">greater</span><span class="o">&lt;</span><span class="n">ii</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">Q</span><span class="p">;</span><span class="w">   </span><span class="c1">// 최소힙: {거리, 노드}</span>
+<span class="w">    </span><span class="n">dis</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">ii</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">));</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">Q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ii</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">top</span><span class="p">();</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">u</span><span class="p">])</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w">   </span><span class="c1">// 이미 더 짧은 경로 처리됨 — 스킵</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">tu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">td</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">second</span><span class="p">;</span><span class="w">   </span><span class="c1">// 목적지, 가중치</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">td</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">tu</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">dis</span><span class="p">[</span><span class="n">tu</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">td</span><span class="p">;</span>
+<span class="w">                </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">ii</span><span class="p">(</span><span class="n">dis</span><span class="p">[</span><span class="n">tu</span><span class="p">],</span><span class="w"> </span><span class="n">tu</span><span class="p">));</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">dis</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 사용</span>
+<span class="n">G</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">G</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">pb</span><span class="p">(</span><span class="n">ii</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">));</span><span class="w">   </span><span class="c1">// 단방향 유향 그래프</span>
+<span class="n">vi</span><span class="w"> </span><span class="n">dis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dijkstra</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="_3">다익스트라 핵심</h3>
+<ul>
+<li><code>priority_queue&lt;ii, vii, greater&lt;ii&gt;&gt;</code> — 최소힙 필수</li>
+<li><code>if (d &gt; dis[u]) continue</code> — 낡은 거리값 처리 스킵 (핵심 최적화)</li>
+<li>음수 간선 불가 → 음수 있으면 벨만포드</li>
+</ul>
+<hr />
+<h2 id="7-11404">7. 플로이드-워셜 (11404)</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">// 초기화</span>
+<span class="n">vvi</span><span class="w"> </span><span class="nf">dis</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">vi</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">INF</span><span class="p">));</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">   </span><span class="c1">// 자기 자신 = 0</span>
+
+<span class="c1">// 간선 입력</span>
+<span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="n">dis</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">dis</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">],</span><span class="w"> </span><span class="n">c</span><span class="p">);</span><span class="w">   </span><span class="c1">// 중복 간선: 최솟값 유지</span>
+
+<span class="c1">// 3중 for (k=경유 노드)</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+<span class="w">                </span><span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+
+<span class="c1">// 출력: INF는 0으로</span>
+<span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">INF</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">dis</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+</code></pre></div>
+
+<blockquote>
+<p>시간복잡도: O(V³) | 모든 쌍 최단거리 | N≤500 수준에서 사용</p>
+</blockquote>
+<hr />
+<h2 id="8-2252">8. 위상정렬 (2252)</h2>
+<div class="highlight"><pre><span></span><code><span class="n">vvi</span><span class="w"> </span><span class="n">Adj</span><span class="p">;</span>
+<span class="n">vi</span><span class="w"> </span><span class="n">indegree</span><span class="p">;</span>
+<span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Q</span><span class="p">;</span>
+
+<span class="n">Adj</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="n">indegree</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="n">Adj</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">pb</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="n">indegree</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+
+<span class="c1">// 진입차수 0인 노드 모두 큐에 삽입</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">indegree</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">Q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Adj</span><span class="p">[</span><span class="n">t</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">indegree</span><span class="p">[</span><span class="n">next</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">indegree</span><span class="p">[</span><span class="n">next</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<blockquote>
+<p>사이클 존재 시 큐가 비어도 모든 노드 처리 안 됨 — 사이클 감지에 응용 가능.</p>
+</blockquote>
+<hr />
+<h2 id="9-scc-2150">9. SCC — 타잔 알고리즘 (2150)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="n">vi</span><span class="w"> </span><span class="nf">d</span><span class="p">(</span><span class="n">MAX</span><span class="p">),</span><span class="w"> </span><span class="n">finished</span><span class="p">(</span><span class="n">MAX</span><span class="p">);</span>
+<span class="n">vvi</span><span class="w"> </span><span class="nf">graph</span><span class="p">(</span><span class="n">MAX</span><span class="p">);</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">vi</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">SCC</span><span class="p">;</span>
+<span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">St</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">++</span><span class="n">id</span><span class="p">;</span><span class="w">      </span><span class="c1">// 방문 순서 부여</span>
+<span class="w">    </span><span class="n">St</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+
+<span class="w">    </span><span class="n">FOR</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">sz</span><span class="p">(</span><span class="n">graph</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">graph</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">[</span><span class="n">y</span><span class="p">])</span><span class="w">           </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span><span class="w"> </span><span class="n">dfs</span><span class="p">(</span><span class="n">y</span><span class="p">));</span><span class="w">         </span><span class="c1">// 미방문</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">finished</span><span class="p">[</span><span class="n">y</span><span class="p">])</span><span class="w"> </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">[</span><span class="n">y</span><span class="p">]);</span><span class="w">          </span><span class="c1">// 방문했지만 미완료</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 루트 노드: parent == d[x] → SCC 확정</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parent</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">vi</span><span class="w"> </span><span class="n">scc</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">St</span><span class="p">.</span><span class="n">top</span><span class="p">();</span><span class="w"> </span><span class="n">St</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="n">scc</span><span class="p">.</span><span class="n">pb</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="w">            </span><span class="n">finished</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">parent</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">sort</span><span class="p">(</span><span class="n">all</span><span class="p">(</span><span class="n">scc</span><span class="p">));</span>
+<span class="w">        </span><span class="n">SCC</span><span class="p">.</span><span class="n">pb</span><span class="p">(</span><span class="n">mp</span><span class="p">(</span><span class="n">scc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">scc</span><span class="p">));</span><span class="w">   </span><span class="c1">// 정렬 후 저장</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 모든 노드에서 미방문이면 dfs 시작</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">dfs</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+<span class="n">sort</span><span class="p">(</span><span class="n">all</span><span class="p">(</span><span class="n">SCC</span><span class="p">));</span><span class="w">   </span><span class="c1">// SCC를 사전순 정렬</span>
+<span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sz</span><span class="p">(</span><span class="n">SCC</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+</code></pre></div>
+
+<h3 id="vs">타잔 vs 코사라주</h3>
+<table>
+<thead>
+<tr>
+<th>알고리즘</th>
+<th>구현</th>
+<th>DFS 횟수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>타잔</td>
+<td>재귀 DFS 1번</td>
+<td>1회</td>
+</tr>
+<tr>
+<td>코사라주</td>
+<td>역방향 그래프 + DFS</td>
+<td>2회</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">알고리즘 선택 가이드</h2>
+<table>
+<thead>
+<tr>
+<th>상황</th>
+<th>알고리즘</th>
+<th>복잡도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>단일 출발 최단거리, 양수 간선</td>
+<td>다익스트라</td>
+<td>O((V+E) log V)</td>
+</tr>
+<tr>
+<td>단일 출발, 음수 간선</td>
+<td>벨만포드</td>
+<td>O(VE)</td>
+</tr>
+<tr>
+<td>모든 쌍 최단거리</td>
+<td>플로이드-워셜</td>
+<td>O(V³)</td>
+</tr>
+<tr>
+<td>순서 결정 / DAG</td>
+<td>위상정렬</td>
+<td>O(V+E)</td>
+</tr>
+<tr>
+<td>강연결 요소 분리</td>
+<td>타잔/코사라주</td>
+<td>O(V+E)</td>
+</tr>
+<tr>
+<td>미로 최단거리</td>
+<td>BFS</td>
+<td>O(V+E)</td>
+</tr>
+<tr>
+<td>연결 요소 탐색</td>
+<td>DFS</td>
+<td>O(V+E)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_5">주의점 &amp; 자주 하는 실수</h2>
+<ul>
+<li><strong>방문 표시 시점</strong>: 큐에 넣을 때 (<code>push</code> 직후) — pop 후 하면 중복 삽입</li>
+<li><strong>다익스트라 스킵 조건</strong>: <code>if (d &gt; dis[u]) continue</code> 빠뜨리면 TLE</li>
+<li><strong>플로이드 k 루프 가장 바깥</strong>: <code>k → i → j</code> 순서 — 다른 순서면 틀림</li>
+<li><strong>위상정렬 사이클</strong>: 결과 노드 수 &lt; n이면 사이클 존재</li>
+<li><strong>타잔 finished 배열</strong>: 스택에 있는데 방문된 노드 구분용 — 없으면 오답</li>
+<li><strong>3D BFS 배열 크기</strong>: <code>bfs_num[1010][1010][2]</code> — 상태 차원 확인</li>
+<li><strong>다중 소스 BFS</strong>: 모든 소스를 거리=0으로 초기에 큐 삽입</li>
+<li><strong>INF + INF 오버플로우</strong>: 플로이드에서 <code>dis[i][k] != INF</code> 조건 체크 권장</li>
+</ul>
+</body>
+</html>

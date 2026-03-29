@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>동적 계획법 (DP) 치트시트</title>
+<style>
+@page { size: A4; margin: 12mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Pretendard', -apple-system, 'Noto Sans KR', sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.45;
+    color: #1a1a1a;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 30px;
+}
+h1 {
+    font-size: 15pt;
+    border-bottom: 2px solid #1e40af;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    color: #1e3a5f;
+}
+h2 {
+    font-size: 11pt;
+    color: #2563eb;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    border-left: 3px solid #2563eb;
+    padding-left: 6px;
+    break-after: avoid;
+}
+h3 {
+    font-size: 9.5pt;
+    font-weight: 700;
+    margin-top: 8px;
+    margin-bottom: 3px;
+    break-after: avoid;
+}
+p { margin: 3px 0; font-size: 9pt; }
+ul, ol { padding-left: 14px; margin: 3px 0; }
+li { font-size: 9pt; margin-bottom: 1px; }
+pre {
+    background: #f8f9fa;
+    border: 1px solid #d1d5db;
+    border-radius: 3px;
+    padding: 6px;
+    font-size: 7.5pt;
+    font-family: 'JetBrains Mono', 'D2Coding', 'Fira Code', monospace;
+    overflow-x: auto;
+    margin: 3px 0 6px 0;
+    line-height: 1.35;
+    break-inside: avoid;
+}
+code {
+    background: #e5e7eb;
+    padding: 0.5px 3px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', 'D2Coding', monospace;
+    font-size: 8pt;
+}
+pre code {
+    background: none;
+    padding: 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4px 0;
+    font-size: 8pt;
+    break-inside: avoid;
+}
+th, td {
+    border: 1px solid #d1d5db;
+    padding: 3px 5px;
+    text-align: left;
+}
+th {
+    background: #f0f4ff;
+    font-weight: 600;
+    color: #1e3a5f;
+}
+tr:nth-child(even) { background: #f9fafb; }
+blockquote {
+    border-left: 3px solid #f59e0b;
+    background: #fef9ee;
+    padding: 4px 8px;
+    margin: 4px 0;
+    font-size: 8.5pt;
+}
+strong { color: #dc2626; }
+em { font-style: italic; color: #6b7280; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 8px 0; }
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+@media print {
+    body { columns: 2; column-gap: 10mm; column-rule: 1px solid #e5e7eb; max-width: 190mm; padding: 0; font-size: 8.5pt; }
+    h1 { column-span: all; }
+    pre { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<h1 id="dp">동적 계획법 (DP) 치트시트</h1>
+<blockquote>
+<p>실제 코드 기반 | 343개 파일 분석 | define_inf: 226회, memo_array: 42회, recursive_memo: 6회</p>
+</blockquote>
+<hr />
+<h2 id="_1">헤더 &amp; 공통 매크로</h2>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;bits/stdc++.h&gt;</span>
+<span class="cp">#define INF 987654321          </span><span class="c1">// 또는 1000000010</span>
+<span class="cp">#define ini(x, n) memset(x, n, sizeof(x))</span>
+<span class="cp">#define fastio ios_base::sync_with_stdio(false); cin.tie(nullptr);</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="1-top-down-vs-bottom-up">1. Top-Down (메모이제이션) vs Bottom-Up</h2>
+<table>
+<thead>
+<tr>
+<th>방식</th>
+<th>특징</th>
+<th>패턴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Top-Down</td>
+<td>재귀 + memo 배열</td>
+<td><code>if (ret != -1) return ret;</code></td>
+</tr>
+<tr>
+<td>Bottom-Up</td>
+<td>반복문 테이블 채우기</td>
+<td><code>dp[i] = dp[i-1] + ...</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-memset-1-top-down">2. memset -1 패턴 — Top-Down 초기화</h2>
+<h3 id="9184-w-3d">기본 패턴 (9184 W함수, 3D 메모)</h3>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="mi">60</span><span class="p">][</span><span class="mi">60</span><span class="p">][</span><span class="mi">60</span><span class="p">];</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">w</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  </span><span class="c1">// 기저 조건</span>
+<span class="w">    </span><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">][</span><span class="n">c</span><span class="p">];</span><span class="w">                   </span><span class="c1">// 레퍼런스 트릭!</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w">                  </span><span class="c1">// 캐시 히트</span>
+<span class="w">    </span><span class="c1">// ... 점화식</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* 계산 */</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">signed</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ini</span><span class="p">(</span><span class="n">memo</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span><span class="w">   </span><span class="c1">// memset(memo, -1, sizeof(memo))</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="_2">레퍼런스 트릭 핵심</h3>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">][</span><span class="n">c</span><span class="p">];</span><span class="w">   </span><span class="c1">// 참조자로 memo 셀을 직접 가리킴</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ret</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w">  </span><span class="c1">// 조건 확인</span>
+<span class="k">return</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">계산값</span><span class="p">;</span><span class="w">        </span><span class="c1">// 대입과 동시에 반환 — 코드 1줄 절약</span>
+</code></pre></div>
+
+<blockquote>
+<p><code>int ret = memo[a][b][c]</code>로 쓰면 대입이 원본에 반영 안 됨 — 반드시 <code>&amp;</code> 사용</p>
+</blockquote>
+<h3 id="memset">memset 값 선택 가이드</h3>
+<table>
+<thead>
+<tr>
+<th>값</th>
+<th>memset 인수</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-1</code></td>
+<td><code>memset(arr, -1, ...)</code></td>
+<td>"미계산" 표시 (모든 비트 1 = -1)</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td><code>memset(arr, 0, ...)</code></td>
+<td>0 초기화</td>
+</tr>
+<tr>
+<td><code>0x3f3f3f3f</code></td>
+<td><code>memset(arr, 0x3f, ...)</code></td>
+<td>INF 근사값 (~1e9)</td>
+</tr>
+<tr>
+<td><code>INF</code> 직접</td>
+<td>루프로 초기화</td>
+<td>정확한 INF 필요 시</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="c1">// INF를 정확히 초기화해야 할 때</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">987654321</span><span class="p">;</span>
+<span class="n">memo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">  </span><span class="c1">// 기저값 덮어쓰기</span>
+</code></pre></div>
+
+<hr />
+<h2 id="3-1d-dp-1463-1">3. 1D DP — 최소 연산 (1463 1로 만들기)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="mi">1000010</span><span class="p">];</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">987654321</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">               </span><span class="c1">// 미계산 확인</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">],</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">// 초기화: INF로 채우고 기저값 설정</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">987654321</span><span class="p">;</span>
+<span class="n">memo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="4-top-down-2579">4. Top-Down — 계단 오르기 (2579)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">stair</span><span class="p">[</span><span class="mi">310</span><span class="p">],</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="mi">310</span><span class="p">];</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// 0 초기화 활용: memo[n]==0 이면 미계산 (값이 0일 수 없는 문제)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+<span class="w">        </span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stair</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="mi">-2</span><span class="p">),</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="mi">-3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stair</span><span class="p">[</span><span class="n">n</span><span class="mi">-1</span><span class="p">]);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<blockquote>
+<p>주의: <code>!memo[n]</code> 패턴은 dp값이 0이 될 수 없을 때만 사용 가능. 범용은 memset -1 권장.</p>
+</blockquote>
+<hr />
+<h2 id="5-bottom-up-2d-rgb-1149">5. Bottom-Up 2D — RGB 거리 (1149)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">cost</span><span class="p">[</span><span class="mi">1010</span><span class="p">][</span><span class="mi">3</span><span class="p">];</span>
+
+<span class="c1">// bottom-up: i=2부터 직전 행 참조하며 누적</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">min</span><span class="p">({</span><span class="n">cost</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">cost</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">cost</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">2</span><span class="p">]}));</span>
+</code></pre></div>
+
+<hr />
+<h2 id="6-lis-11053">6. LIS — 최장 증가 부분수열 (11053)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">dp</span><span class="p">[</span><span class="mi">1010</span><span class="p">],</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">V</span><span class="p">;</span>
+
+<span class="c1">// O(N^2) 기본 LIS</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">            </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<blockquote>
+<p>O(N log N) LIS는 <code>lower_bound</code> + patience sorting 사용.</p>
+</blockquote>
+<hr />
+<h2 id="7-lcs-9251">7. LCS — 최장 공통 부분수열 (9251)</h2>
+<div class="highlight"><pre><span></span><code><span class="n">string</span><span class="w"> </span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="mi">1010</span><span class="p">][</span><span class="mi">1010</span><span class="p">];</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">s2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s1</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">s2</span><span class="p">[</span><span class="n">j</span><span class="mi">-1</span><span class="p">])</span>
+<span class="w">            </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="mi">-1</span><span class="p">],</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="n">j</span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">            </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="mi">-1</span><span class="p">],</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">()][</span><span class="n">s2</span><span class="p">.</span><span class="n">size</span><span class="p">()];</span>
+</code></pre></div>
+
+<h3 id="lcs">LCS 점화식 요약</h3>
+<div class="highlight"><pre><span></span><code><span class="n">s1</span><span class="o">[</span><span class="n">i-1</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">s2</span><span class="o">[</span><span class="n">j-1</span><span class="o">]</span><span class="err">:</span><span class="w">  </span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dp</span><span class="o">[</span><span class="n">i-1</span><span class="o">][</span><span class="n">j-1</span><span class="o">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<span class="nl">otherwise</span><span class="p">:</span><span class="w">            </span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i-1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j-1</span><span class="o">]</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="8-01-12865">8. 0/1 배낭 (12865)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">dp</span><span class="p">[</span><span class="mi">101</span><span class="p">][</span><span class="mi">100010</span><span class="p">];</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">V</span><span class="p">;</span><span class="w">  </span><span class="c1">// {무게, 가치}</span>
+
+<span class="c1">// Top-Down</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">item</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">weight</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">item</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">weight</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">item</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">            </span><span class="n">dp</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">weight</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">item</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">item</span><span class="p">].</span><span class="n">first</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">item</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+<span class="w">        </span><span class="n">dp</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">weight</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">weight</span><span class="p">],</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">item</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">weight</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">dp</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">weight</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">// 초기화</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">memset</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
+</code></pre></div>
+
+<h3 id="bottom-up">Bottom-Up 배낭 (더 일반적)</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// dp[w] = 무게 w 이하에서 최대 가치</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">K</span><span class="p">;</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">first</span><span class="p">;</span><span class="w"> </span><span class="n">w</span><span class="o">--</span><span class="p">)</span><span class="w">  </span><span class="c1">// 역순! 중복 방지</span>
+<span class="w">        </span><span class="n">dp</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">w</span><span class="p">],</span><span class="w"> </span><span class="n">dp</span><span class="p">[</span><span class="n">w</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">first</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">second</span><span class="p">);</span>
+</code></pre></div>
+
+<hr />
+<h2 id="9-dp-tsp-2098">9. 비트마스크 DP — TSP (2098)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="mi">20</span><span class="p">][</span><span class="mi">20</span><span class="p">];</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="mi">16</span><span class="p">][(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)];</span><span class="w">   </span><span class="c1">// [현재노드][방문비트마스크]</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mask</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">    </span><span class="c1">// 모두 방문</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span><span class="w">         </span><span class="c1">// 시작점으로 복귀</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">mask</span><span class="p">];</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">re</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">~</span><span class="n">mask</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">INF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// 미방문 &amp; 경로 존재</span>
+<span class="w">            </span><span class="n">re</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">re</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">mask</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">w</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">re</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 초기 호출: 0번 노드에서 출발, 0번 방문 표시</span>
+<span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">   </span><span class="c1">// mask=1 = 0번 노드 방문</span>
+</code></pre></div>
+
+<h3 id="_3">비트마스크 연산 정리</h3>
+<table>
+<thead>
+<tr>
+<th>연산</th>
+<th>코드</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i번 방문</td>
+<td><code>mask \| (1 &lt;&lt; i)</code></td>
+<td>i번 비트 set</td>
+</tr>
+<tr>
+<td>i번 미방문 확인</td>
+<td><code>~mask &amp; (1 &lt;&lt; i)</code></td>
+<td>i번 비트 0인지</td>
+</tr>
+<tr>
+<td>전체 방문 확인</td>
+<td><code>mask == (1&lt;&lt;n)-1</code></td>
+<td>모든 비트 1</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-dp-11066">10. 구간 DP (11066 파일합치기)</h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="mi">510</span><span class="p">],</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="mi">510</span><span class="p">][</span><span class="mi">510</span><span class="p">],</span><span class="w"> </span><span class="n">sum</span><span class="p">[</span><span class="mi">510</span><span class="p">];</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                    </span><span class="c1">// 기저: 파일 1개 = 비용 0</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">re</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INF</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">re</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">re</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sum</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">sum</span><span class="p">[</span><span class="n">a</span><span class="mi">-1</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span><span class="w">                                        </span><span class="c1">// 구간 합: prefix sum 활용</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">memo</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">re</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// prefix sum 초기화</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">memo</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span><span class="w">   </span><span class="c1">// 테스트케이스마다 초기화</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<blockquote>
+<p>구간 DP 점화식: <code>dp[a][b] = min(dp[a][k] + dp[k+1][b] + cost(a,b))</code></p>
+</blockquote>
+<hr />
+<h2 id="_4">센티널(기저값) 패턴 모음</h2>
+<table>
+<thead>
+<tr>
+<th>문제 유형</th>
+<th>기저 조건</th>
+<th>코드</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1로 만들기</td>
+<td>n==1</td>
+<td><code>memo[1] = 0</code></td>
+</tr>
+<tr>
+<td>계단 오르기</td>
+<td>n &lt; 0</td>
+<td><code>if (n &lt; 0) return 0</code></td>
+</tr>
+<tr>
+<td>배낭</td>
+<td>item==0</td>
+<td><code>if (item == 0) return 0</code></td>
+</tr>
+<tr>
+<td>TSP</td>
+<td>전체 방문</td>
+<td><code>if (mask == (1&lt;&lt;n)-1) return w[pos][0]</code></td>
+</tr>
+<tr>
+<td>구간 DP</td>
+<td>구간 길이 1</td>
+<td><code>if (a == b) return 0</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_5">패턴 빈도 &amp; 주의점</h2>
+<ul>
+<li><strong>INF 정의</strong>: 226회 — <code>987654321</code> 또는 <code>1000000010</code> 자주 사용</li>
+<li><strong>memo 배열</strong>: 42회 — 전역 선언으로 0 초기화 활용 또는 <code>memset -1</code></li>
+<li><strong>레퍼런스 트릭</strong>: <code>int&amp; ret = memo[...]</code> — Top-Down의 핵심</li>
+<li><strong>오버플로우</strong>: <code>INF + INF</code>가 음수 되지 않게 주의 (<code>long long</code> 사용 or 조건 체크)</li>
+<li><strong>구간 DP 초기화</strong>: 테스트케이스마다 <code>memset</code> 재호출 필요</li>
+<li><strong>비트마스크</strong>: n≤20일 때만 <code>(1&lt;&lt;n)</code> 사용 — n=20이면 배열 크기 1MB 초과 주의</li>
+</ul>
+</body>
+</html>
