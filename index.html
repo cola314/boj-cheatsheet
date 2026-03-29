@@ -52,20 +52,37 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
   <script>
-    // Docsify hook: Prism으로 C++ 하이라이팅 (페이지 렌더 후)
+    // C 언어 문법 등록 (cpp의 의존성)
+    Prism.languages.c = Prism.languages.extend('clike', {
+      'comment': {pattern: /\/\/(?:[^\r\n\\]|\\(?:\r\n?|\n|(?![\r\n])))*|\/\*[\s\S]*?(?:\*\/|$)/, greedy: true},
+      'string': {pattern: /"(?:\\(?:\r\n|[\s\S])|[^"\\\r\n])*"/, greedy: true},
+      'class-name': {pattern: /(\b(?:enum|struct)\s+(?:__attribute__\s*\([\s\S]*?\)\s*)?)\w+|\b[a-z]\w*_t\b/, lookbehind: true},
+      'keyword': /\b(?:_Alignas|_Alignof|_Atomic|_Bool|_Complex|_Generic|_Imaginary|_Noreturn|_Static_assert|_Thread_local|__attribute__|asm|auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|inline|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|typeof|union|unsigned|void|volatile|while)\b/,
+      'function': /\b[a-z_]\w*(?=\s*\()/i,
+      'number': /(?:\b0x(?:[\da-f]+(?:\.[\da-f]*)?|\.[\da-f]+)(?:p[+-]?\d+)?|(?:\b\d+(?:\.\d*)?|\B\.\d+)(?:e[+-]?\d+)?)[ful]{0,4}/i,
+      'operator': />>=?|<<=?|->|([-+&|:])\1|[?:~]|[-+*/%&|^!=<>]=?/
+    });
+    // C++ 문법 등록
+    Prism.languages.cpp = Prism.languages.extend('c', {
+      'class-name': [{pattern: /(\b(?:class|concept|enum|struct|typename)\s+)(?!final)\w+/, lookbehind: true}, /\b[A-Z]\w*(?=\s*::\s*\w+\s*\()/, /\b[A-Z_]\w*(?=\s*::\s*~\w+\s*\()/i],
+      'keyword': /\b(?:alignas|alignof|asm|auto|bool|break|case|catch|char|char16_t|char32_t|char8_t|class|co_await|co_return|co_yield|compl|concept|const|const_cast|consteval|constexpr|constinit|continue|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|final|float|for|friend|goto|if|import|inline|int|long|module|mutable|namespace|new|noexcept|nullptr|operator|override|private|protected|public|register|reinterpret_cast|requires|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while)\b/,
+      'number': {pattern: /(?:\b0b[01']+|\b0x(?:[\da-f']+(?:\.[\da-f']*)?|\.[\da-f']+)(?:p[+-]?[\d']+)?|(?:\b[\d']+(?:\.[\d']*)?|\B\.[\d']+)(?:e[+-]?[\d']+)?)[ful]{0,4}/i, greedy: true},
+      'operator': />>=?|<<=?|->|--|\+\+|&&|\|\||[?:~]|<=>|[-+*/%&|^!=<>]=?|\b(?:and|and_eq|bitand|bitor|not|not_eq|or|or_eq|xor|xor_eq)\b/,
+      'boolean': /\b(?:false|true)\b/
+    });
+    Prism.languages.insertBefore('cpp', 'string', {
+      'module': {pattern: /(\b(?:import|module)\s+)(?:"(?:\\(?:\r\n|[\s\S])|[^"\\\r\n])*"|<[^<>\r\n]*>)/, lookbehind: true, greedy: true},
+      'raw-string': {pattern: /R"([^()\\ ]{0,16})\([\s\S]*?\)\1"/, alias: 'string', greedy: true}
+    });
+
+    // Docsify hook: 페이지 렌더 후 재하이라이팅
     window.$docsify.plugins = [].concat(function(hook) {
       hook.doneEach(function() {
-        if (typeof Prism === 'undefined') return;
-        // 언어 로드 후 재하이라이팅
-        document.querySelectorAll('pre code').forEach(function(el) {
+        document.querySelectorAll('pre code[class*="lang-"]').forEach(function(el) {
           Prism.highlightElement(el);
         });
       });
     }, window.$docsify.plugins || []);
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script>
-    Prism.plugins.autoloader.languages_path = 'https://cdn.jsdelivr.net/npm/prismjs@1/components/';
   </script>
 </body>
 </html>
